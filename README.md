@@ -14,13 +14,22 @@ ebank-demo对E商贸通报文数据的加解密/解析生成的封装的示例..
 -----------
 
 签约:  http://localhost:8070/trade/sign.jsp
-查询签约 : http://localhost:8070/trade/querySign.jsp 
+
+查询签约 : http://localhost:8070/trade/querySign.jsp
+
 查询余额  :  http://localhost:8070/trade/queryYuE.jsp
-入金 : http://localhost:8070/trade/ruJing.jsp  
-出金: http://localhost:8070/trade/chuJing.jsp  
-冻结/解冻: http://localhost:8070/trade/dongJie.jsp 
-查询付款状态: http://localhost:8070/trade/queryPayStat.jsp 
+
+入金 : http://localhost:8070/trade/ruJing.jsp
+
+出金: http://localhost:8070/trade/chuJing.jsp
+
+冻结/解冻: http://localhost:8070/trade/dongJie.jsp
+
+查询付款状态: http://localhost:8070/trade/queryPayStat.jsp
+
 停止交易: http://localhost:8070/trade/haltTrade.jsp 
+
+
 
 
 **视频讲解**
