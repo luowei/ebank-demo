@@ -1,0 +1,49 @@
+<ivy-module version="2.0">
+    <info organisation="com.rootls" module="trade-manage"/>
+
+    <configurations>
+        <conf name="compile" />
+        <conf name="runtime" extends="compile"/>
+        <conf name="test" extends="runtime"/>
+        <conf name="default" visibility="public"/>
+    </configurations>
+
+    <dependencies>
+
+        <dependency org="asm" name="asm" rev="3.3.1" transitive="false" />
+        <dependency org="cglib" name="cglib" rev="2.2.2" transitive="false"/>
+        <!--<dependency org="org.javassist" name="javassist" rev="3.17.1-GA" conf="runtime->default"/>-->
+
+        <dependency org="org.apache.httpcomponents" name="httpclient" rev="4.3.5" conf="default"/>
+
+        <dependency org="org.hibernate" name="hibernate-entitymanager" rev="4.1.9.Final" conf="default"/>
+
+        <dependency org="com.mysema.querydsl" name="querydsl-jpa" rev="3.4.3" conf="default"/>
+
+        <dependency org="org.springframework" name="spring-context" rev="4.1.0.RELEASE" conf="default"/>
+
+        <dependency org="org.springframework" name="spring-webmvc-portlet" rev="4.1.0.RELEASE" conf="default"/>
+
+        <dependency org="org.springframework" name="spring-aspects" rev="4.1.0.RELEASE" conf="default"/>
+        <dependency org="org.springframework" name="spring-context-support" rev="4.1.0.RELEASE" conf="default"/>
+
+        <dependency org="org.springframework.data" name="spring-data-jpa" rev="1.7.0.RELEASE" conf="default"/>
+        <dependency org="org.springframework.data" name="spring-data-jdbc-core" rev="1.0.0.RELEASE" conf="default"/>
+
+        <!--com-->
+        <dependency org="junit" name="junit-dep" rev="4.10" conf="default"/>
+        <dependency org="org.springframework" name="spring-test" rev="4.1.0.RELEASE" conf="default"/>
+
+        <dependency org="jstl" name="jstl" rev="1.2" conf="default" transitive="false"/>
+        <dependency org="org.slf4j" name="slf4j-api" rev="1.7.7" conf="default" />
+        <!--<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.7.7" conf="runtime->default" />-->
+        <!--<dependency org="log4j" name="log4j" rev="1.2.17" conf="default"/>-->
+
+        <!--<dependency org="org.codehaus.jackson" name="jackson-mapper-lgpl" rev="1.9.13" conf="default"/>-->
+        <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.4.2" conf="default" transitive="false"/>
+        <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.4.2" conf="default" transitive="false"/>
+        <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.4.2" conf="default" transitive="false"/>
+
+        <exclude org="commons-logging"/>
+    </dependencies>
+</ivy-module>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:repository="http://www.springframework.org/schema/data/repository"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/data/jpa
+       http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+       http://www.springframework.org/schema/data/repository
+       http://www.springframework.org/schema/data/repository/spring-repository.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <context:component-scan base-package="com.rootls">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <context:property-placeholder location="classpath:dataSource.properties"/>
+
+    <bean id="sqlServerDriver" class="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+
+    <bean id="netbankDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driver" ref="sqlServerDriver"/>
+        <property name="url" value="${netbank.jdbc.url}"/>
+        <property name="username" value="${netbank.jdbc.username}"/>
+        <property name="password" value="${netbank.jdbc.password}"/>
+    </bean>
+
+    <bean id="tradeDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driver" ref="sqlServerDriver"/>
+        <property name="url" value="${trade.jdbc.url}"/>
+        <property name="username" value="${trade.jdbc.username}"/>
+        <property name="password" value="${trade.jdbc.password}"/>
+    </bean>
+
+    <bean id="expertDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driver" ref="sqlServerDriver"/>
+        <property name="url" value="${expert.jdbc.url}"/>
+        <property name="username" value="${expert.jdbc.username}"/>
+        <property name="password" value="${expert.jdbc.password}"/>
+    </bean>
+
+    <bean id="pcdbDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driver" ref="sqlServerDriver"/>
+        <property name="url" value="${pcdb.jdbc.url}"/>
+        <property name="username" value="${pcdb.jdbc.username}"/>
+        <property name="password" value="${pcdb.jdbc.password}"/>
+    </bean>
+
+    <bean id="tradeJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="tradeDataSource"/>
+    </bean>
+
+    <bean id="expertJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="expertDataSource"/>
+    </bean>
+
+    <bean id="pcdbJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="pcdbDataSource"/>
+    </bean>
+
+    <jpa:repositories base-package="com.rootls">
+        <!--<repository:exclude-filter type="regex" expression="net.rootls.custom.impl.*"/>-->
+        <!--<repository:exclude-filter type="regex" expression="com.rootls*Custom"/>-->
+    </jpa:repositories>
+
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="netbankDataSource"/>
+        <property name="packagesToScan" value="com.rootls.manage"/>
+
+        <property name="persistenceXmlLocation" value="classpath:persistence.xml"/>
+        <property name="persistenceUnitName" value="persistenceUnit"/>
+        <property name="persistenceProvider">
+            <bean class="org.hibernate.ejb.HibernatePersistence" />
+        </property>
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+        </property>
+        <!--<property name="jpaProperties">-->
+            <!--<props>-->
+                <!--<prop key="hibernate.show_sql">true</prop>-->
+            <!--</props>-->
+        <!--</property>-->
+
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="database" value="SQL_SERVER"/>
+                <property name="generateDdl" value="false"/>
+                <property name="showSql" value="true"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+</beans>

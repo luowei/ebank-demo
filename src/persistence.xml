@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             version="2.0">
+    <persistence-unit name="persistenceUnit" transaction-type="RESOURCE_LOCAL">
+        <class>com.rootls.manage.model.SysCorpBank</class>
+        <class>com.rootls.manage.model.SysCorporation</class>
+        <class>com.rootls.netbank.trade.sign.Jh3Fc001</class>
+        <class>com.rootls.netbank.trade.rujing.Jh3Fc002</class>
+        <class>com.rootls.netbank.trade.chujing.Jh3Fc022</class>
+        <class>com.rootls.netbank.trade.chujing.Jh3Fc003</class>
+        <class>com.rootls.netbank.trade.jiaoyi.Jh3Fc009</class>
+        <class>com.rootls.netbank.trade.jiaoyi.Jh3Fc010</class>
+        <class>com.rootls.netbank.trade.jiaoyi.Jh3Fc011</class>
+        <properties>
+            <property name="hibernate.connection.url" value="jdbc:sqlserver://172.29.12.11:2433"/>
+            <property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+            <property name="hibernate.connection.username" value="tradenetbank"/>
+            <property name="hibernate.connection.password" value="4FGHJGKLH63543#$%^RFGHJK4"/>
+        </properties>
+    </persistence-unit>
+</persistence>

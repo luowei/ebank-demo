@@ -1,0 +1,112 @@
+<?xml version="1.0" ?>
+<project name="authdemo" basedir="." default="war"
+         xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <property environment="env"/>
+    <property file="build.properties"/>
+
+    <!-- Standard Directory Layout -->
+    <property name="src.dir" value="src"/>
+    <property name="com.dir" value="com"/>
+    <property name="build.dir" value="build"/>
+    <property name="dist.dir" value="dist"/>
+
+    <property name="java.home" value="${env.JDK_HOME}"/>
+    <property name="lib.dir" value="WebRoot/WEB-INF/lib"/>
+    <property name="classes.dir" value="WebRoot/WEB-INF/classes"/>
+
+    <path id="project.classpath">
+        <fileset dir="${basedir}/lib"/>
+        <!-- project specific libs -->
+        <fileset dir="${basedir}/${lib.dir}"/>
+        <pathelement location="${tomcat.root}/lib/servlet-api.jar"/>
+        <pathelement location="${tomcat.root}/lib/jsp-api.jar"/>
+        <pathelement location="${tomcat.root}/lib/jasper.jar"/>
+    </path>
+
+    <target name="prepare">
+        <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${lib.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${classes.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <target name="retrieve" description="retreive dependencies with ivy">
+        <taskdef uri="antlib:org.apache.ivy.ant" resource="org/apache/ivy/ant/antlib.xml"
+                 classpath="${basedir}/lib/ivy.jar"/>
+        <property name="ivy.lib.dir" value="${basedir}/lib"/>
+        <ivy:settings file="ivysettings.xml"/>
+        <ivy:resolve file="ivy.xml" conf="default"/>
+        <ivy:retrieve type="jar"/>
+    </target>
+
+    <target name="compile" depends="prepare, retrieve">
+        <condition property="java.target_version" value="1.6">
+            <not>
+                <isset property="java.target_version"/>
+            </not>
+        </condition>
+        <echo>java.home is ${java.home} and the target version is ${java.target_version}</echo>
+        <echo>javac version: ${java.version}</echo>
+        <property name="dest.dir" value="${classes.dir}"/>
+        <javac sourcepath="" srcdir="${src.dir}" destdir="${dest.dir}" classpathref="project.classpath"
+               optimize="false" verbose="false" fork="true" nowarn="true"
+               deprecation="false" debug="true" compiler="modern" includeAntRuntime="false"
+               source="${java.target_version}" target="${java.target_version}" listfiles="true">
+            <compilerarg line="-encoding UTF-8 "/>
+        </javac>
+
+        <copy todir="${dest.dir}" failonerror="true">
+            <fileset dir="${src.dir}">
+                <include name="**/*.properties"/>
+                <include name="**/*.xml"/>
+                <include name="**/*.xsd"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="jar" depends="compile">
+        <tstamp prefix="build">
+            <format property="TODAY" pattern="d-MMMM-yyyy" locale="en"/>
+        </tstamp>
+        <jar destfile="${dist.dir}/${ant.project.name}.jar">
+            <fileset dir="${classes.dir}">
+                <include name="**"/>
+            </fileset>
+            <manifest>
+                <attribute name="Built" value="${build.TODAY} by ${user.name}"/>
+                <attribute name="Build-OS" value="${os.name} ${os.version}"/>
+                <attribute name="Build-Java" value="Java ${java.version}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="war" depends="compile">
+        <tstamp prefix="build">
+            <format property="TODAY" pattern="yyyy-MM-dd" locale="cn"/>
+        </tstamp>
+        <copy todir="${lib.dir}" failonerror="true">
+            <fileset dir="lib">
+                <include name="**/spring-security-*.jar"/>
+                <include name="**/org.springframework.transaction-*.jar"/>
+            </fileset>
+        </copy>
+        <war destfile="${dist.dir}/${ant.project.name}.war" webxml="WebRoot/WEB-INF/web.xml">
+            <fileset dir="WebRoot">
+                <exclude name="**/src/**"/>
+                <exclude name="**/*.jar"/>
+            </fileset>
+            <lib dir="${lib.dir}"/>
+            <manifest>
+                <attribute name="Built" value="${build.TODAY} by ${user.name}"/>
+                <attribute name="Build-OS" value="${os.name} ${os.version}"/>
+                <attribute name="Build-Java" value="Java ${java.version}"/>
+            </manifest>
+        </war>
+    </target>
+
+</project>
